@@ -1,17 +1,18 @@
 FROM frolvlad/alpine-glibc:alpine-3.8_glibc-2.28
 
+ARG ALPINE_ARM_NONE_EABI_BASE_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm"
+ARG ALPINE_ARM_NONE_EABI_PACKAGE_DATE="7-2018q2"
+ARG ALPINE_ARM_NONE_EABI_PACKAGE_VERSION="7-2018-q2-update"
+ARG ALPINE_ARM_NONE_EABI_PACKAGE_NAME="gcc-arm-none-eabi-$ALPINE_ARM_NONE_EABI_PACKAGE_VERSION"
+ARG ALPINE_ARM_NONE_EABI_PACKAGE_FILENAME="$ALPINE_ARM_NONE_EABI_PACKAGE_NAME-linux.tar.bz2"
+
 # -- Build Tools
 # Install Needed package for toolchain download: ca-certificates, openssl, wget
 # Download the toolchain
 # Uncompress it
 # Remove upper package and toolchain archive
 # Remove toolchain doc
-RUN ALPINE_ARM_NONE_EABI_BASE_URL="https://developer.arm.com/-/media/Files/downloads/gnu-rm" && \
-    ALPINE_ARM_NONE_EABI_PACKAGE_DATE="7-2018q2" && \
-    ALPINE_ARM_NONE_EABI_PACKAGE_VERSION="7-2018-q2-update" && \
-    ALPINE_ARM_NONE_EABI_PACKAGE_NAME="gcc-arm-none-eabi-$ALPINE_ARM_NONE_EABI_PACKAGE_VERSION" && \
-    ALPINE_ARM_NONE_EABI_PACKAGE_FILENAME="$ALPINE_ARM_NONE_EABI_PACKAGE_NAME-linux.tar.bz2" && \
-    apk add --no-cache --virtual build-dependencies \
+RUN apk add --no-cache --virtual build-dependencies \
         ca-certificates \
         openssl \
         wget && \
@@ -24,7 +25,7 @@ RUN ALPINE_ARM_NONE_EABI_BASE_URL="https://developer.arm.com/-/media/Files/downl
     apk add --no-cache make=4.2.1-r2
 
 # Set up the compiler path
-ENV PATH="/toolchain/$ALPINE_ARM_NONE_EABI_PACKAGE_NAME/bin:${PATH}"
+ENV PATH="/toolchain/${ALPINE_ARM_NONE_EABI_PACKAGE_NAME}/bin:${PATH}"
 
 WORKDIR /home
 
